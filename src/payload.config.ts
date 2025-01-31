@@ -3,7 +3,7 @@ import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, TaskHandlerResult } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -15,7 +15,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 // Функция-обработчик для генерации PDF
-async function generatePDFHandler({ input }: TaskGeneratePDF) {
+async function generatePDFHandler({ input }: TaskGeneratePDF): Promise<TaskHandlerResult<any>> {
   const { orderId } = input // Извлечение идентификатора заказа
   console.log(`Генерация PDF для заказа с ID: ${orderId}`)
 
@@ -23,6 +23,12 @@ async function generatePDFHandler({ input }: TaskGeneratePDF) {
   console.log(`Файл успешно сгенерирован для заказа с ID: ${orderId}`)
 
   // Логика сохранения результата (например, статус генерации) может быть добавлена здесь.
+
+  return {
+    output: {
+      success: true,
+    },
+  }
 }
 
 export default buildConfig({
@@ -72,13 +78,7 @@ export default buildConfig({
 
     {
       slug: 'orders',
-      fields: [
-        {
-          name: 'pdfGenerated', // Поле для хранения информации о статусе генерации PDF
-          type: 'checkbox',
-          defaultValue: false, // По умолчанию PDF еще не сгенерирован
-        },
-      ],
+      fields: [],
       hooks: {
         afterChange: [
           async ({ doc, req: { payload } }) => {

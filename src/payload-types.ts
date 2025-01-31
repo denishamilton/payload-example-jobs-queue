@@ -109,7 +109,6 @@ export interface Media {
  */
 export interface Order {
   id: number;
-  pdfGenerated?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -312,7 +311,6 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  pdfGenerated?: T;
   updatedAt?: T;
   createdAt?: T;
 }
